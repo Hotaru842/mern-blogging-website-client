@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, Outlet } from "react-router-dom";
-import logo from "../imgs/logo.png";
+import logo from "../imgs/logo.png"; 
 
 const Navbar = () => {
   const [searchBoxVisibility, setSearchBoxVisibility] = useState(false);
@@ -17,17 +17,17 @@ const Navbar = () => {
           placeholder="Search"
           className="w-full p-4 pl-6 md:w-auto bg-grey pr-[12%] md:pr-6 rounded-full placeholder:text-dark-grey md:pl-12"
         />
-        <i className="fi fi-rr-search absolute right-[10%] md:pointer-events-none md:left-5 top-1/2 -translate-y-1/2 text-xl text-dark-grey" /> 
+        <i className="fi fi-br-search absolute right-[10%] md:pointer-events-none md:left-5 top-1/2 -translate-y-1/2 text-xl text-dark-grey" /> 
       </div>
       <div className="flex items-center gap-3 ml-auto md:gap-6">
         <button 
           className="flex items-center justify-center w-12 h-12 rounded-full md:hidden bg-grey"
           onClick={() => setSearchBoxVisibility(currentVal => !currentVal)}
         >
-          <i className="text-xl fi fi-rr-search" />
+          <i className="text-xl fi fi-br-search" />
         </button>
         <Link to="/editor" className="hidden gap-2 md:flex link">
-          <i className="fi fi-rr-edit" />
+          <i className="fi fi-br-edit" />
           <p>Write</p>
         </Link>
         <Link className="py-2 btn-dark" to="/sign-in">
