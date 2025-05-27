@@ -2,10 +2,22 @@ import { useContext, useState } from "react";
 import { UserContext } from "../App";
 import { Link, Outlet } from "react-router-dom";
 import logo from "../imgs/logo.png"; 
+import UserNavigationPanel from "./user-navigation.component";
 
 const Navbar = () => {
   const [searchBoxVisibility, setSearchBoxVisibility] = useState(false);
   const { userAuth, userAuth: { access_token, profile_img }} = useContext(UserContext);
+  const [userNavPanel, setUserNavPanel] = useState(false);
+
+  const handleUserNavPanel = () => {
+    setUserNavPanel(currentVal => !currentVal);
+  }
+
+  const handleBlur = () => {
+    setTimeout(() => {
+      setUserNavPanel(false);
+    }, 300);
+  }
 
   return (
     <>
@@ -40,10 +52,14 @@ const Navbar = () => {
               <i className="block mt-1 text-xl fi fi-br-bell" /> 
               </button>
             </Link>
-            <div className="relative">
+            <div className="relative" onClick={handleUserNavPanel} onBlur={handleBlur}>
               <button className="w-12 h-12 mt-1">
                 <img src={profile_img} alt={profile_img} className="object-cover w-full h-full rounded-full" />
               </button>
+              { 
+                userNavPanel ?
+                <UserNavigationPanel /> : null  
+              }
             </div>
           </>
           : 
