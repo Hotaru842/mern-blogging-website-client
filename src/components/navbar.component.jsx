@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { UserContext } from "../App";
 import { Link, Outlet } from "react-router-dom";
 import logo from "../imgs/logo.png"; 
 
 const Navbar = () => {
   const [searchBoxVisibility, setSearchBoxVisibility] = useState(false);
+  const { userAuth, userAuth: { access_token, profile_img }} = useContext(UserContext);
 
   return (
     <>
@@ -29,13 +31,31 @@ const Navbar = () => {
         <Link to="/editor" className="hidden gap-2 md:flex link">
           <i className="fi fi-br-edit" />
           <p>Write</p>
-        </Link>
-        <Link className="py-2 btn-dark" to="/sign-in">
-          Sign In
-        </Link>
-        <Link className="hidden py-2 btn-light md:block" to="/sign-up">
-          Sign Up
-        </Link>
+        </Link> 
+        {
+          access_token ?
+          <>
+            <Link to="/dashboard/notification">
+              <button className="relative w-12 h-12 rounded-full bg-grey hover:bg-black/10">
+              <i className="block mt-1 text-xl fi fi-br-bell" /> 
+              </button>
+            </Link>
+            <div className="relative">
+              <button className="w-12 h-12 mt-1">
+                <img src={profile_img} alt={profile_img} className="object-cover w-full h-full rounded-full" />
+              </button>
+            </div>
+          </>
+          : 
+          <>
+            <Link className="py-2 btn-dark" to="/sign-in">
+              Sign In
+            </Link>
+            <Link className="hidden py-2 btn-light md:block" to="/sign-up">
+              Sign Up
+            </Link>
+          </>
+        } 
       </div>
     </nav>
     <Outlet />
