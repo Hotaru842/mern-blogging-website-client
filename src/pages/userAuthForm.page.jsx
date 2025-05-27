@@ -7,10 +7,10 @@ import AnimationWrapper from "../common/page-animation";
 import { Toaster, toast } from "react-hot-toast";
 import axios from "axios"; 
 import { storeInSession } from "../common/session";
+import { authWithGoogle } from "../common/firebase";
 
 const UserAuthForm = ({ type }) => {
   let { userAuth: { access_token }, setUserAuth } = useContext(UserContext);
-  console.log(access_token);
 
   const userAuthThroughServer = (serverRoute, formData) => {
     axios.post(import.meta.env.VITE_SERVER_DOMAIN + serverRoute, formData)
@@ -57,6 +57,17 @@ const UserAuthForm = ({ type }) => {
     userAuthThroughServer(serverRoute, formData);
   }
 
+  const handleGoogleAuth = (e) => {
+    e.preventDefault();
+
+    authWithGoogle().then((user) => {
+      console.log(user);
+    }).catch((err) => {
+      toast.error("trouble login through Google");
+      return console.log(err);
+    })
+  }
+
   return (
    <>
     {
@@ -100,7 +111,9 @@ const UserAuthForm = ({ type }) => {
             <hr className="w-1/2 border-black" />
           </div>
 
-          <button className="flex items-center justify-center btn-dark gap-4 w-[90%] center">
+          <button className="flex items-center justify-center btn-dark gap-4 w-[90%] center"
+            onClick={handleGoogleAuth}
+          >
             <img src={googleIcon} alt="google icon" className="w-5" />
             continue with google
           </button>
