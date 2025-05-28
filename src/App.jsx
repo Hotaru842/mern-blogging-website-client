@@ -4,7 +4,7 @@ import UserAuthForm from "./pages/userAuthForm.page";
 import { lookInSession } from "./common/session";
 import Navbar from "./components/navbar.component";
 import Home from "./pages/home.page";
-import Editor from "./pages/editor.pages";
+import Editor from "./pages/editor.page";
 import Error from "./pages/404.page";
 
 export const UserContext = createContext({});
