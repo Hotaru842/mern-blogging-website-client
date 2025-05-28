@@ -1,10 +1,11 @@
 import { createContext, useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Home from "./pages/home.page";
-import Error from "./pages/404.page";
-import Navbar from "./components/navbar.component";
 import UserAuthForm from "./pages/userAuthForm.page";
 import { lookInSession } from "./common/session";
+import Navbar from "./components/navbar.component";
+import Home from "./pages/home.page";
+import Editor from "./pages/editor.pages";
+import Error from "./pages/404.page";
 
 export const UserContext = createContext({});
 
@@ -22,6 +23,7 @@ function App() {
     <BrowserRouter>
       <UserContext.Provider value={{ userAuth, setUserAuth }}>
         <Routes>
+          <Route path="/editor" element={<Editor />} />
           <Route path="/" element={<Navbar />}>
             <Route path="sign-in" element={<UserAuthForm type="sign-in" />} />
             <Route path="sign-up" element={<UserAuthForm type="sign-up" />} />
