@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { EditorContext } from "../pages/editor.page";
 import { Link } from "react-router-dom";
 import logo from "../imgs/logo.png";
@@ -6,10 +6,21 @@ import AnimationWrapper from "../common/page-animation";
 import defaultBanner from "../imgs/banner.png"; 
 import { uploadImage } from "../common/aws";
 import { Toaster, toast } from "react-hot-toast";
+import EditorJS from "@editorjs/editorjs";
+import { tools } from "./tools.component"; 
 
 const BlogEditor = () => {
   let { blog, blog: { title, banner, content, tags, desc }, setBlog} = useContext(EditorContext);
 
+  useEffect(() => {
+    let editor = new EditorJS({
+      holderId: "textEditor",
+      data: "",
+      tools: tools,
+      placeholder: "Let's write an awesome story"
+    });
+  }, [])
+  
   const handleBannerUpload = (e) => {
     let img = e.target.files[0]; 
     
@@ -93,6 +104,11 @@ const BlogEditor = () => {
             >
               
             </textarea>
+            <hr className="w-full my-5 opacity-10" />
+
+            <div id="textEditor" className="font-gelasio">
+
+            </div>
           </div>
         </section>
       </AnimationWrapper>
