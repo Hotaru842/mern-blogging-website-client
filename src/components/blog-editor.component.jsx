@@ -28,6 +28,19 @@ const BlogEditor = () => {
     }
   }
 
+  const handleTitleKeyDown = (e) => {
+    if(e.keyCode === 13) {
+      e.preventDefault();
+    }
+  }
+
+  const handleTitleChange = (e) => {
+    let input = e.target;
+
+    input.style.height = "auto";
+    input.style.height = input.scrollHeight + "px";
+  }
+
   return (
     <>
       <nav className="navbar">
@@ -68,6 +81,15 @@ const BlogEditor = () => {
                 />
               </label>
             </div>
+
+            <textarea
+              placeholder="Blog Title"
+              className="w-full h-20 mt-10 text-4xl font-medium leading-tight outline-none resize-none placeholder:opacity-40"
+              onKeyDown={handleTitleKeyDown}
+              onChange={handleTitleChange}
+            >
+              
+            </textarea>
           </div>
         </section>
       </AnimationWrapper>
