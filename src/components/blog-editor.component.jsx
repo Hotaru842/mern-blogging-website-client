@@ -1,13 +1,14 @@
-import { useRef } from "react";
+import { useContext } from "react";
+import { EditorContext } from "../pages/editor.page";
 import { Link } from "react-router-dom";
 import logo from "../imgs/logo.png";
 import AnimationWrapper from "../common/page-animation";
-import banner from "../imgs/banner.png"; 
+import defaultBanner from "../imgs/banner.png"; 
 import { uploadImage } from "../common/aws";
 import { Toaster, toast } from "react-hot-toast";
 
 const BlogEditor = () => {
-  let blogBannerRef = useRef();
+  let { blog, blog: { title, banner, content, tags, desc }, setBlog} = useContext(EditorContext);
 
   const handleBannerUpload = (e) => {
     let img = e.target.files[0]; 
@@ -19,7 +20,8 @@ const BlogEditor = () => {
         if(url) {
           toast.dismiss(loadingToast);
           toast.success("Image uploaded successfully!");
-          blogBannerRef.current.src = url;
+
+          setBlog({ ...blog, banner: url });
         }
       }).catch((err) => {
         toast.dismiss(loadingToast);
@@ -39,6 +41,8 @@ const BlogEditor = () => {
 
     input.style.height = "auto";
     input.style.height = input.scrollHeight + "px";
+
+    setBlog({ ...blog, title: input.value });
   }
 
   return (
@@ -48,7 +52,7 @@ const BlogEditor = () => {
           <img src={logo} alt="logo" />
         </Link>
         <p className="w-full text-black max-md:hidden line-clamp-1">
-          New Blog
+          { title.length ? title : "New Blog" }
         </p>
 
         <div className="flex gap-4 ml-auto">
@@ -68,8 +72,7 @@ const BlogEditor = () => {
             <div className="relative transition-opacity duration-500 bg-white border-4 aspect-video hover:opacity-60 border-grey">
               <label htmlFor="uploadBanner">
                 <img 
-                  ref={blogBannerRef}
-                  src={banner}
+                  src={banner ? banner : defaultBanner}
                   className="z-20"
                 />
                 <input 
