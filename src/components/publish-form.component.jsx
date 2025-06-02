@@ -2,9 +2,11 @@ import { useContext } from 'react';
 import { EditorContext } from '../pages/editor.page';
 import { Toaster, toast } from 'react-hot-toast';
 import AnimationWrapper from '../common/page-animation';
+import Tag from './tags.component';
 
 const PublishForm = () => {
   let characterLimit = 200;
+  let tagLimit = 10;
   let { blog, blog: { banner, title, tags, desc }, setBlog, setEditorState } = useContext(EditorContext);
 
   const handleCloseEvent = () => {
@@ -26,6 +28,24 @@ const PublishForm = () => {
   const handleTitleKeyDown = (e) => {
     if(e.keyCode === 13) {
       e.preventDefault();
+    }
+  }
+
+  const handleTagKeyDown = (e) => {
+    if(e.keyCode === 13 || e.keyCode === 188) {
+      e.preventDefault();
+
+      let tag = e.target.value;
+
+      if(tags.length < tagLimit) {
+        if(!tags.includes(tag) && tag.length) {
+          setBlog({ ...blog, tags: [ ...tags, tag ] });
+        }
+      } else {
+        toast.error(`you can add max ${tagLimit} tags`);
+      }
+
+      e.target.value = "";
     }
   }
 
@@ -75,8 +95,15 @@ const PublishForm = () => {
           <div className="relative py-2 pb-4 pl-2 input-box">
             <input type="text" placeholder="Topic" 
               className="sticky top-0 left-0 pl-4 mb-3 bg-white input-box focus:bg-white"
+              onKeyDown={handleTagKeyDown}
             />
+            {tags.map((tag, i) => {
+              return (
+                <Tag tag={tag} tagIndex={i} key={i} />
+              )
+            })}
           </div>
+          <p className="mt-1 mb-4 text-right text-dark-grey">{tagLimit - tags.length} tags left</p>
         </div>
       </section>
     </AnimationWrapper>
