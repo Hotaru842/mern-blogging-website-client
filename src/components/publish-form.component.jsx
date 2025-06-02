@@ -2,7 +2,7 @@ import { useContext } from 'react';
 import { EditorContext } from '../pages/editor.page';
 import { Toaster, toast } from 'react-hot-toast';
 import AnimationWrapper from '../common/page-animation';
-import Tag from './tags.component';
+import Tag from './tag.component';
 
 const PublishForm = () => {
   let characterLimit = 200;
