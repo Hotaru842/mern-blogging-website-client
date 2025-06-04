@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import UserAuthForm from "./pages/userAuthForm.page";
 import { lookInSession } from "./common/session";
 import Navbar from "./components/navbar.component";
-import Home from "./pages/home.page";
+import HomePage from "./pages/home.page";
 import Editor from "./pages/editor.page";
 import Error from "./pages/404.page";
 
@@ -25,6 +25,7 @@ function App() {
         <Routes>
           <Route path="/editor" element={<Editor />} />
           <Route path="/" element={<Navbar />}>
+            <Route index element={<HomePage />} />
             <Route path="sign-in" element={<UserAuthForm type="sign-in" />} />
             <Route path="sign-up" element={<UserAuthForm type="sign-up" />} />
           </Route>
