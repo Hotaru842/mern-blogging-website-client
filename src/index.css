@@ -7,7 +7,7 @@
 
 @layer components {
     * {
-        @apply m-0 p-0 box-border text-base outline-purple/30 duration-100;
+        @apply m-0 p-0 box-border !text-base outline-purple/30 duration-100;
     }
 
     html{
@@ -47,11 +47,11 @@
     }
 
     .btn-dark{
-        @apply whitespace-nowrap bg-black text-white rounded-full py-3 px-6 text-xl capitalize hover:bg-opacity-80;
+        @apply whitespace-nowrap bg-black text-white rounded-full py-3 px-6 !text-xl capitalize hover:bg-opacity-80;
     }
 
     .btn-light{
-        @apply btn-dark bg-grey text-black;
+        @apply btn-dark bg-grey text-black !text-xl;
     }
 
     .input-box {
@@ -87,15 +87,15 @@
     }
 
     #textEditor h2, h2{
-        @apply font-inter text-4xl leading-normal font-bold max-md:text-3xl max-md:leading-snug !important;
+        @apply font-inter !text-4xl leading-normal font-bold max-md:!text-3xl max-md:leading-snug !important;
     }
 
     #textEditor h3, h3 {
-        @apply font-inter text-3xl leading-loose max-md:text-2xl max-md:leading-normal !important;
+        @apply font-inter !text-3xl leading-loose max-md:!text-2xl max-md:leading-normal !important;
     }
 
     #textEditor *, .blog-page-content *{
-        @apply font-gelasio text-xl leading-10 md:text-2xl;
+        @apply font-gelasio !text-xl leading-10 md:!text-2xl;
     }
 
     #textEditor a, .blog-page-content a{
@@ -107,11 +107,11 @@
     }
 
     .blog-title{
-        @apply text-2xl font-medium leading-7 line-clamp-3 sm:line-clamp-2;
+        @apply !text-2xl font-medium leading-7 line-clamp-3 sm:line-clamp-2;
     }
 
     .blog-index{
-        @apply text-4xl sm:text-3xl lg:text-5xl font-bold text-grey leading-none;
+        @apply !text-4xl sm:!text-3xl lg:!text-5xl font-bold text-grey leading-none;
     }
 }
 
