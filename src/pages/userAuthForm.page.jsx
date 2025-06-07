@@ -12,12 +12,11 @@ import { authWithGoogle } from "../common/firebase";
 const UserAuthForm = ({ type }) => {
   let { userAuth: { access_token }, setUserAuth } = useContext(UserContext);
 
-  console.log(access_token);
-
   const userAuthThroughServer = (serverRoute, formData) => {
     axios.post(import.meta.env.VITE_SERVER_DOMAIN + serverRoute, formData)
     .then(({data}) => {
       storeInSession("user", JSON.stringify(data));
+      console.log(data);
       setUserAuth(data);
     }).catch(({response}) => {
       toast.error(response.data.error);

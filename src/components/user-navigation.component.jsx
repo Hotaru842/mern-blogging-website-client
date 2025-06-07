@@ -1,15 +1,17 @@
 import { useContext } from "react";
 import { UserContext } from "../App";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import AnimationWrapper from "../common/page-animation";
 import { removeFromSession } from "../common/session";
 
 const UserNavigationPanel = () => {
+  const navigate = useNavigate();
   const { userAuth: { username, access_token }, setUserAuth } = useContext(UserContext);
 
   const signOutUser = () => {
     removeFromSession("user");
     setUserAuth({ access_token: null });
+    navigate("/sign-in");
   }
 
   return (

@@ -5,10 +5,12 @@ import Loader from '../components/loader.component';
 import axios from "axios";
 import BlogPostCard from '../components/blog-post.component';
 import MinimalBlogCard from '../components/nobanner-blog-post.component';
+import { activeTabRef } from "../components/inpage-navigation.component";
 
 const HomePage = () => {
   const [blogs, setBlogs] = useState(null);
   const [trendingBlogs, setTrendingBlogs] = useState(null);
+  const [pageState, setPageState] = useState("home");
   let categories = ["programming", "cryptocurrency", "hollywood", "film making", "social media", "cooking", "sweet", "tech", "AI", "finances", "travel"];
 
   const fetchLatestBlogs = () => {
@@ -31,16 +33,36 @@ const HomePage = () => {
     })
   }
 
+  const loadBlogByCategory = (e) => {
+    let category = e.target.innerText.toLowerCase();
+
+    setBlogs(null);
+
+    if(pageState === category) {
+      setPageState("home");
+      return;
+    }
+
+    setPageState(category);
+  }
+
   useEffect(() => {
-    fetchLatestBlogs();
-    fetchTrendingBlogs();
-  }, []);
+    activeTabRef.current.click();
+
+    if(pageState === "home") {
+      fetchLatestBlogs();
+    }
+
+    if(!trendingBlogs) {
+      fetchTrendingBlogs();
+    }
+  }, [pageState]);
 
   return (
     <AnimationWrapper>
       <section className="flex justify-center gap-10 h-cover">
         <div className="w-full">
-          <InPageNavigation routes={["home", "trending blogs"]} defaultHidden={["trending blogs"]}>
+          <InPageNavigation routes={[pageState, "trending blogs"]} defaultHidden={["trending blogs"]}>
             <>
               {
                 blogs === null ? <Loader /> : blogs.map((blog, i) => {
@@ -68,7 +90,7 @@ const HomePage = () => {
                 <div className="flex flex-wrap gap-3">
                   {
                     categories.map((category, i) => {
-                      return <button className="tag" key={i}>
+                      return <button onClick={loadBlogByCategory} className={"tag " + (pageState === category ? "bg-black text-white" : "")} key={i}>
                         {category}
                       </button>
                     })
