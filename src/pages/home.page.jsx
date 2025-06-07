@@ -6,6 +6,7 @@ import axios from "axios";
 import BlogPostCard from '../components/blog-post.component';
 import MinimalBlogCard from '../components/nobanner-blog-post.component';
 import { activeTabRef } from "../components/inpage-navigation.component";
+import NoDataMessage from '../components/nodata.component';
 
 const HomePage = () => {
   const [blogs, setBlogs] = useState(null);
@@ -16,6 +17,16 @@ const HomePage = () => {
   const fetchLatestBlogs = () => {
     axios.get(import.meta.env.VITE_SERVER_DOMAIN + "/latest-blogs")
     .then(({data}) => {
+      setBlogs(data.blogs);
+    })
+    .catch(err => {
+      console.log(err);
+    })
+  }
+
+  const fetchBlogsByCategory = () => {
+    axios.post(import.meta.env.VITE_SERVER_DOMAIN + "/search-blogs", { tag: pageState })
+    .then(({data}) => { 
       setBlogs(data.blogs);
     })
     .catch(err => {
@@ -51,6 +62,8 @@ const HomePage = () => {
 
     if(pageState === "home") {
       fetchLatestBlogs();
+    } else {
+      fetchBlogsByCategory();
     }
 
     if(!trendingBlogs) {
@@ -65,11 +78,15 @@ const HomePage = () => {
           <InPageNavigation routes={[pageState, "trending blogs"]} defaultHidden={["trending blogs"]}>
             <>
               {
-                blogs === null ? <Loader /> : blogs.map((blog, i) => {
-                  return <AnimationWrapper transition={{ duration: 1, delay: i*.1 }} key={i}>
-                    <BlogPostCard content={blog} author={blog.author.personal_info} />
-                  </AnimationWrapper>
-                })
+                blogs === null ? 
+                <Loader /> : 
+                blogs.length ?
+                  blogs.map((blog, i) => {
+                    return <AnimationWrapper transition={{ duration: 1, delay: i*.1 }} key={i}>
+                      <BlogPostCard content={blog} author={blog.author.personal_info} />
+                    </AnimationWrapper>
+                  }) :
+                <NoDataMessage message="No blogs published" />
               }
             </>
             <>
