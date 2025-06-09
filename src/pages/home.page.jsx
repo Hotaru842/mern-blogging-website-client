@@ -8,6 +8,7 @@ import MinimalBlogCard from '../components/nobanner-blog-post.component';
 import { activeTabRef } from "../components/inpage-navigation.component";
 import { filterPaginationData } from '../common/filter-pagination-data';
 import NoDataMessage from '../components/nodata.component';
+import LoadMoreDataButton from '../components/load-more.component';
 
 const HomePage = () => {
   const [blogs, setBlogs] = useState(null);
@@ -15,15 +16,16 @@ const HomePage = () => {
   const [pageState, setPageState] = useState("home");
   let categories = ["programming", "cryptocurrency", "hollywood", "film making", "social media", "cooking", "sweet", "tech", "AI", "finances", "travel"];
 
-  const fetchLatestBlogs = (page = 1) => {
+  const fetchLatestBlogs = ({page = 1}) => {
     axios.post(import.meta.env.VITE_SERVER_DOMAIN + "/latest-blogs", { page })
-    .then(({data}) => {
-      let formatedData = filterPaginationData({
+    .then(async ({data}) => {
+      let formatedData = await filterPaginationData({
         state: blogs,
         data: data.blogs,
         page,
         countRoute: "/all-latest-blogs-count"
       })
+      console.log(formatedData);
       setBlogs(formatedData);
     })
     .catch(err => {
@@ -68,7 +70,7 @@ const HomePage = () => {
     activeTabRef.current.click();
 
     if(pageState === "home") {
-      fetchLatestBlogs();
+      fetchLatestBlogs({ page: 1 });
     } else {
       fetchBlogsByCategory();
     }
@@ -87,14 +89,15 @@ const HomePage = () => {
               {
                 blogs === null ? 
                 <Loader /> : 
-                blogs.length ?
-                  blogs.map((blog, i) => {
+                blogs.results.length ?
+                  blogs.results.map((blog, i) => {
                     return <AnimationWrapper transition={{ duration: 1, delay: i*.1 }} key={i}>
                       <BlogPostCard content={blog} author={blog.author.personal_info} />
                     </AnimationWrapper>
                   }) :
                 <NoDataMessage message="No blogs published" />
               }
+              <LoadMoreDataButton state={blogs} fetchDataFunc={fetchLatestBlogs} />
             </>
             <>
               {
