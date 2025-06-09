@@ -6,18 +6,25 @@ import axios from "axios";
 import BlogPostCard from '../components/blog-post.component';
 import MinimalBlogCard from '../components/nobanner-blog-post.component';
 import { activeTabRef } from "../components/inpage-navigation.component";
+import { filterPaginationData } from '../common/filter-pagination-data';
 import NoDataMessage from '../components/nodata.component';
 
 const HomePage = () => {
   const [blogs, setBlogs] = useState(null);
-  const [trendingBlogs, setTrendingBlogs] = useState(null);
+  const [trendingBlogs, setTrendingBlogs] = useState(null); 
   const [pageState, setPageState] = useState("home");
   let categories = ["programming", "cryptocurrency", "hollywood", "film making", "social media", "cooking", "sweet", "tech", "AI", "finances", "travel"];
 
-  const fetchLatestBlogs = () => {
-    axios.get(import.meta.env.VITE_SERVER_DOMAIN + "/latest-blogs")
+  const fetchLatestBlogs = (page = 1) => {
+    axios.post(import.meta.env.VITE_SERVER_DOMAIN + "/latest-blogs", { page })
     .then(({data}) => {
-      setBlogs(data.blogs);
+      let formatedData = filterPaginationData({
+        state: blogs,
+        data: data.blogs,
+        page,
+        countRoute: "/all-latest-blogs-count"
+      })
+      setBlogs(formatedData);
     })
     .catch(err => {
       console.log(err);
@@ -91,11 +98,14 @@ const HomePage = () => {
             </>
             <>
               {
-                 trendingBlogs === null ? <Loader /> : trendingBlogs.map((blog, i) => {
+                 trendingBlogs === null ? <Loader /> : 
+                 trendingBlogs.length ?
+                 trendingBlogs.map((blog, i) => {
                   return <AnimationWrapper transition={{ duration: 1, delay: i*.1 }} key={i}>
                     <MinimalBlogCard blog={blog} index={i} />
                   </AnimationWrapper>
-                })
+                }) :
+                <NoDataMessage message="No trending blogs found" />
               }
             </>
           </InPageNavigation>
@@ -119,11 +129,14 @@ const HomePage = () => {
                   Trending <i className="fi fi-br-arrow-trend-up" />
                 </h2>
                 {
-                  trendingBlogs === null ? <Loader /> : trendingBlogs.map((blog, i) => {
+                  trendingBlogs === null ? <Loader /> : 
+                  trendingBlogs.length ?
+                  trendingBlogs.map((blog, i) => {
                     return <AnimationWrapper transition={{ duration: 1, delay: i*.1 }} key={i}>
                       <MinimalBlogCard blog={blog} index={i} />
                     </AnimationWrapper>
-                  })
+                  }) :
+                  <NoDataMessage message="No trending blogs found" />
                 }
               </div>
         </div>  
