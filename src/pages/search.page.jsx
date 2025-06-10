@@ -33,8 +33,13 @@ const SearchPage = () => {
   }
 
   useEffect(() => {
-    searchBlogs({ page: 1 });
-  }, [query])
+    resetState();
+    searchBlogs({ page: 1, create_new_arr: true });
+  }, [query]);
+
+  const resetState = () => {
+    setBlogs(null);
+  }
 
   return (
     <section className="flex justify-center gap-10 h-cover">
@@ -52,7 +57,7 @@ const SearchPage = () => {
                   }) :
                 <NoDataMessage message="No blogs published" />
               }
-              {/*<LoadMoreDataButton state={blogs} fetchDataFunc={() => {}} />*/}
+            <LoadMoreDataButton state={blogs} fetchDataFunc={searchBlogs} />
           </>
         </InPageNavigation>
       </div>
