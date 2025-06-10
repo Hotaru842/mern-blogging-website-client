@@ -5,6 +5,7 @@ import { lookInSession } from "./common/session";
 import Navbar from "./components/navbar.component";
 import HomePage from "./pages/home.page";
 import Editor from "./pages/editor.page";
+import SearchPage from "./pages/search.page";
 import Error from "./pages/404.page";
 
 export const UserContext = createContext({});
@@ -28,6 +29,7 @@ function App() {
             <Route index element={<HomePage />} />
             <Route path="sign-in" element={<UserAuthForm type="sign-in" />} />
             <Route path="sign-up" element={<UserAuthForm type="sign-up" />} />
+            <Route path="search/:query" element={<SearchPage />} />
           </Route>
           <Route path="*" element={<Error />} />
         </Routes>
