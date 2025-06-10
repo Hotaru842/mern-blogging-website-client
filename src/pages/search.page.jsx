@@ -8,10 +8,12 @@ import NoDataMessage from "../components/nodata.component";
 import LoadMoreDataButton from "../components/load-more.component";
 import axios from "axios";
 import { filterPaginationData } from "../common/filter-pagination-data";
+import UserCard from "../components/usercard.component";
 
 const SearchPage = () => {
   let {query} = useParams();
   const [blogs, setBlogs] = useState(null);
+  const [users, setUsers] = useState(null);
 
   const searchBlogs = ({ page = 1, create_new_arr = false }) => {
     axios.post(import.meta.env.VITE_SERVER_DOMAIN + "/search-blogs", { query, page })
@@ -32,13 +34,39 @@ const SearchPage = () => {
     })
   }
 
+  const fetchUsers = () => {
+    axios.post(import.meta.env.VITE_SERVER_DOMAIN + "/search-users", { query })
+    .then(({data: {users}}) => {
+      setUsers(users);
+    })
+  }
+
   useEffect(() => {
     resetState();
     searchBlogs({ page: 1, create_new_arr: true });
+    fetchUsers();
   }, [query]);
 
   const resetState = () => {
     setBlogs(null);
+    setUsers(null);
+  }
+
+  const UserCardWrapper = () => {
+    return (
+      <> 
+        {
+          users === null ? <Loader /> :
+            users.length > 0 ? 
+              users.map((user, i) => {
+                return <AnimationWrapper key={i} transition={{duration: 1, delay: i * 0.08}}>
+                    <UserCard user={user} />
+                </AnimationWrapper>
+              }) :
+              <NoDataMessage message="No user found" />
+        }
+      </>
+    )
   }
 
   return (
@@ -59,7 +87,12 @@ const SearchPage = () => {
               }
             <LoadMoreDataButton state={blogs} fetchDataFunc={searchBlogs} />
           </>
+          <UserCardWrapper />
         </InPageNavigation>
+      </div>
+      <div className="min-w-[40%] lg:min-w-[350px] max-w-min border-l border-grey pl-8 pt-3 max-md:hidden">
+        <h1 className="mb-8 text-xl font-medium">User related to search <i className="fi fi-br-user" /></h1>
+        <UserCardWrapper />
       </div>
     </section>
   )
