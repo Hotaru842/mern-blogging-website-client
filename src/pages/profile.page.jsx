@@ -4,6 +4,7 @@ import { Link, useParams } from 'react-router-dom';
 import axios from "axios";
 import AnimationWrapper from '../common/page-animation';
 import Loader from '../components/loader.component';
+import AboutUser from '../components/about.component';
 
 export const profileDataStructure = {
   personal_info: {
@@ -59,7 +60,7 @@ const ProfilePage = () => {
           <div className="flex flex-col gap-5 max-md:items-center min-w-[250px]">
             <img src={profile_img} alt={profile_username} className="w-48 h-48 rounded-full bg-grey md:w-32 md:h-32" />
             <h1 className="!text-2xl font-medium">@{profile_username}</h1>
-            <p className="h-6 text-xl capitalize">{fullname}</p>
+            <p className="h-6 !text-xl capitalize">{fullname}</p>
             <p>{total_posts.toLocaleString()} Blogs - {total_reads.toLocaleString()} Reads</p>
             <div className="flex gap-4 mt-2">
               {
@@ -68,6 +69,8 @@ const ProfilePage = () => {
                 null
               }
             </div>
+            <AboutUser bio={bio} social_links={social_links} 
+            joinedAt={joinedAt} className="max-md:hidden" />
           </div>
         </section>
       }
