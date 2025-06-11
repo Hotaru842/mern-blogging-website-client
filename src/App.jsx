@@ -6,7 +6,7 @@ import Navbar from "./components/navbar.component";
 import HomePage from "./pages/home.page";
 import Editor from "./pages/editor.page";
 import SearchPage from "./pages/search.page";
-import Error from "./pages/404.page";
+import PageNotFound from "./pages/404.page";
 
 export const UserContext = createContext({});
 
@@ -30,8 +30,9 @@ function App() {
             <Route path="sign-in" element={<UserAuthForm type="sign-in" />} />
             <Route path="sign-up" element={<UserAuthForm type="sign-up" />} />
             <Route path="search/:query" element={<SearchPage />} />
+            <Route path="*" element={<PageNotFound />} />
           </Route>
-          <Route path="*" element={<Error />} />
+          <Route path="*" element={<PageNotFound />} />
         </Routes>
       </UserContext.Provider>
     </BrowserRouter>
