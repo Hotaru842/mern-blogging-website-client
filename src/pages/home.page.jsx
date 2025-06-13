@@ -14,7 +14,7 @@ const HomePage = () => {
   const [blogs, setBlogs] = useState(null);
   const [trendingBlogs, setTrendingBlogs] = useState(null); 
   const [pageState, setPageState] = useState("home");
-  let categories = ["programming", "cryptocurrency", "hollywood", "film making", "social media", "cooking", "sweet", "tech", "AI", "finances", "travel"];
+  let categories = ["programming", "cryptocurrency", "hollywood", "film making", "social media", "cooking", "sweet", "tech", "artificial intelligense", "finances", "travel"];
 
   const fetchLatestBlogs = ({page = 1}) => {
     axios.post(import.meta.env.VITE_SERVER_DOMAIN + "/latest-blogs", { page })
@@ -128,7 +128,7 @@ const HomePage = () => {
                 <div className="flex flex-wrap gap-3">
                   {
                     categories.map((category, i) => {
-                      return <button onClick={loadBlogByCategory} className={"tag " + (pageState === category ? "bg-black text-white" : "")} key={i}>
+                      return <button onClick={loadBlogByCategory} className={"tag " + (pageState === category ? "!bg-black text-white" : "")} key={i}>
                         {category}
                       </button>
                     })
