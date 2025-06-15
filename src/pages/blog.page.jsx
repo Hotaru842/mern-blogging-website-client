@@ -5,12 +5,12 @@ import Loader from "../components/loader.component";
 import axios from "axios"; 
 import { getDay } from "../common/date";
 import BlogInteraction from "../components/blog-interaction.component";
+import BlogPostCard from "../components/blog-post.component";
 
 export const blogStructure = {
   title: "",
   desc: "",
   content: [],
-  tags: [],
   author: { personal_info: {}},
   banner: "",
   publishedAt: "",
@@ -21,6 +21,7 @@ export const BlogContext = createContext({});
 const BlogPage = () => {
   const { blog_id } = useParams();
   const [blog, setBlog] = useState(blogStructure);
+  const [similarBlogs, setSimilarBlogs] = useState(null);
   const [loading, setLoading] = useState(true);
   const { title, content, banner, author: { personal_info: {
     fullname, username: author_username, profile_img
@@ -29,6 +30,15 @@ const BlogPage = () => {
   const fetchBlog = () => {
     axios.post(import.meta.env.VITE_SERVER_DOMAIN + "/get-blog", { blog_id })
     .then(({data: { blog }}) => {
+      axios.post(import.meta.env.VITE_SERVER_DOMAIN + "/search-blogs", {
+        tag: blog.tags,
+        limit: 6,
+        eliminate_blog: blog_id
+      })
+      .then(({data}) => {
+        setSimilarBlogs(data.blogs);
+      })
+
       setBlog(blog);
       setLoading(false);
     })
@@ -39,8 +49,15 @@ const BlogPage = () => {
   }
 
   useEffect(() => {
+    resetStates();
     fetchBlog();
-  }, [])
+  }, [blog_id]);
+
+  const resetStates = () => {
+    setBlog(blogStructure);
+    setSimilarBlogs(null);
+    setLoading(true);
+  }
 
   return (
     <AnimationWrapper>
@@ -69,6 +86,23 @@ const BlogPage = () => {
             </div>
 
             <BlogInteraction />
+            {/** blog content */}
+            <BlogInteraction />
+            {
+              similarBlogs !== null && similarBlogs.length > 0 ?
+              <>
+                <h1 className="mb-10 text-2xl font-medium mt-14">Similar blogs</h1>
+                {
+                  similarBlogs.map((blog, i) => {
+                    const { author: { personal_info }} = blog;
+                    
+                    return <AnimationWrapper key={i} transition={{ duration: 1, delay: i* 0.08}}>
+                        <BlogPostCard content={blog} author={personal_info} />
+                    </AnimationWrapper>
+                  })
+                }
+              </> : null
+            }
           </div>
         </BlogContext.Provider>
       }
