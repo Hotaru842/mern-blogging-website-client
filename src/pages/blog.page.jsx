@@ -6,6 +6,7 @@ import axios from "axios";
 import { getDay } from "../common/date";
 import BlogInteraction from "../components/blog-interaction.component";
 import BlogPostCard from "../components/blog-post.component";
+import BlogContent from "../components/blog-content.component";
 
 export const blogStructure = {
   title: "",
@@ -39,6 +40,7 @@ const BlogPage = () => {
         setSimilarBlogs(data.blogs);
       })
 
+      console.log(blog.content);
       setBlog(blog);
       setLoading(false);
     })
@@ -86,7 +88,20 @@ const BlogPage = () => {
             </div>
 
             <BlogInteraction />
-            {/** blog content */}
+            
+            {
+              content[0].blocks.length > 0 ?
+              <div className="my-12 font-gelasio blog-page-content">
+              {
+                content[0].blocks.map((block, i) => {
+                  return <div key={i} className="my-4 md:my-8">
+                    <BlogContent block={block} />
+                  </div>
+                })
+              }
+            </div> : null
+            }
+
             <BlogInteraction />
             {
               similarBlogs !== null && similarBlogs.length > 0 ?
