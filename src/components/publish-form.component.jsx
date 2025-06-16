@@ -98,8 +98,6 @@ const PublishForm = () => {
       e.target.classList.remove("disable");
       toast.dismiss(loadingToast);
 
-      console.log(response?.data?.error);
-
       return toast.error(response?.data?.error);
     })
   }

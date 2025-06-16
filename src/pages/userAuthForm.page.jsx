@@ -16,7 +16,6 @@ const UserAuthForm = ({ type }) => {
     axios.post(import.meta.env.VITE_SERVER_DOMAIN + serverRoute, formData)
     .then(({data}) => {
       storeInSession("user", JSON.stringify(data));
-      console.log(data);
       setUserAuth(data);
     }).catch(({response}) => {
       toast.error(response.data.error);
