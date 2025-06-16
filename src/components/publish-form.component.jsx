@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useContext } from 'react';
 import { EditorContext } from '../pages/editor.page';
 import { UserContext } from '../App';
@@ -10,6 +10,7 @@ import axios from 'axios';
 const PublishForm = () => {
   let characterLimit = 200;
   let tagLimit = 10;
+  let { blog_id } = useParams();
   let navigate = useNavigate();
   let { blog, blog: { banner, title, content, tags, desc }, setBlog, setEditorState } = useContext(EditorContext);
   let { userAuth: { access_token }} = useContext(UserContext)
@@ -42,8 +43,8 @@ const PublishForm = () => {
 
       let tag = e.target.value;
 
-      if(tags.length < tagLimit) {
-        if(!tags.includes(tag) && tag.length) {
+      if(tags?.length < tagLimit) {
+        if(!tags?.includes(tag) && tag?.length > 0) {
           setBlog({ ...blog, tags: [ ...tags, tag ] });
         }
       } else {
@@ -59,15 +60,15 @@ const PublishForm = () => {
       return;
     }
 
-    if(!title.length) {
+    if(!title?.length) {
       return toast.error("Write blog title before publishing");
     }
 
-    if(!desc.length || desc.length > characterLimit) {
+    if(!desc?.length || desc?.length > characterLimit) {
       return toast.error(`Write a description about your blog within ${characterLimit} characters to publish`);
     }
 
-    if(!tags.length) {
+    if(!tags?.length) {
       return toast.error("Enter at least 1 tag to help us rank your blog post")
     }
 
@@ -79,10 +80,10 @@ const PublishForm = () => {
       title, banner, desc, content, tags, draft: false
     }
 
-    axios.post(import.meta.env.VITE_SERVER_DOMAIN + "/create-blog", blogObj, {
+    axios.post(import.meta.env.VITE_SERVER_DOMAIN + "/create-blog", { ...blogObj, id: blog_id }, {
       headers: {
         Authorization: `Bearer ${access_token}`
-      }
+      } 
     })
     .then(() => {
       e.target.classList.remove("disable");
@@ -97,7 +98,9 @@ const PublishForm = () => {
       e.target.classList.remove("disable");
       toast.dismiss(loadingToast);
 
-      return toast.error(response.data.error);
+      console.log(response?.data?.error);
+
+      return toast.error(response?.data?.error);
     })
   }
 
@@ -142,7 +145,7 @@ const PublishForm = () => {
           >
 
           </textarea> 
-          <p className="mt-1 text-sm text-right text-dark-grey">{characterLimit - desc.length} characters left</p>
+          <p className="mt-1 text-sm text-right text-dark-grey">{characterLimit - desc?.length} characters left</p>
           <p className="mb-2 text-dark-grey mt-9">Topics - (Help is searching and ranking your blog post)</p>
           <div className="relative py-2 pb-4 pl-2 input-box">
             <input type="text" placeholder="Topic" 

@@ -18,7 +18,7 @@ const blogStructure = {
 export const EditorContext = createContext({});
 
 const Editor = () => {
-  const { blog_id } = useParams();
+  let { blog_id } = useParams();
   const [blog, setBlog] = useState(blogStructure);
   const [editorState, setEditorState] = useState("editor");
   const [textEditor, setTextEditor] = useState({ isReady: false });
@@ -35,12 +35,12 @@ const Editor = () => {
       draft: true,
       mode: "edit",
     })
-    .then(({data: {blog}}) => {
+    .then(({ data: { blog }}) => {
       setBlog(blog);
       setLoading(false);
     })
     .catch((err) => {
-      console.log(err.message);
+      console.log(err);
       setBlog(null);
       setLoading(false);
     })

@@ -20,7 +20,7 @@ export const blogStructure = {
 export const BlogContext = createContext({});
 
 const BlogPage = () => {
-  const { blog_id } = useParams();
+  let { blog_id } = useParams();
   const [blog, setBlog] = useState(blogStructure);
   const [similarBlogs, setSimilarBlogs] = useState(null);
   const [loading, setLoading] = useState(true);
