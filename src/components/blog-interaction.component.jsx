@@ -1,15 +1,32 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { BlogContext } from '../pages/blog.page';
 import { UserContext } from "../App";
 import { Link } from 'react-router-dom';
+import axios from "axios";
 import { Toaster, toast } from "react-hot-toast";
 
 const BlogInteraction = () => {
-  let {blog, blog: {title, blog_id, activity, activity: {total_likes, total_comments}, 
+  let {blog, blog: {_id, title, blog_id, activity, activity: {total_likes, total_comments}, 
   author: {personal_info: {username: author_username}}}, setBlog, isLikedByUser, setIsLikedByUser} = useContext(BlogContext)
 
   const { userAuth: { username, access_token } } = useContext(UserContext);
 
+  useEffect(() => {
+    if(access_token) {
+      axios.post(import.meta.env.VITE_SERVER_DOMAIN + "/is-liked-by-user", { _id }, {
+        headers: {
+          "Authorization": `Bearer ${access_token}`
+        }
+      })
+      .then(({ data: {result}}) => {
+        setIsLikedByUser(Boolean(result));
+      }) 
+      .catch(err => {
+        console.log(err);
+      })
+    }
+  }, [])
+  
   const handleLike = () => {
     if(access_token) {
       setIsLikedByUser(prevVal => !prevVal);
@@ -23,6 +40,18 @@ const BlogInteraction = () => {
       }
 
       setBlog({ ...blog, activity: {...activity, total_likes}}); 
+
+      axios.post(import.meta.env.VITE_SERVER_DOMAIN + "/like-blog", { _id, isLikedByUser }, {
+        headers: {
+          "Authorization": `Bearer ${access_token}`
+        }
+      })
+      .then(({data}) => {
+        console.log(data);
+      })
+      .catch(err => {
+        console.log(err);
+      })
     } else {
       toast.error("Please loggin to like this blog post");
     }
