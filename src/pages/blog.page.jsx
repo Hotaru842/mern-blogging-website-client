@@ -7,6 +7,7 @@ import { getDay } from "../common/date";
 import BlogInteraction from "../components/blog-interaction.component";
 import BlogPostCard from "../components/blog-post.component";
 import BlogContent from "../components/blog-content.component";
+import CommentsContainer from "../components/comments.component";
 
 export const blogStructure = {
   title: "",
@@ -25,6 +26,8 @@ const BlogPage = () => {
   const [similarBlogs, setSimilarBlogs] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isLikedByUser, setIsLikedByUser] = useState(false);
+  const [commentsWrapper, setCommentsWrapper] = useState(false);
+  const [totalParentCommentsLoaded, setTotalParentCommentsLoaded] = useState(0);
 
   const { title, content, banner, author: { personal_info: {
     fullname, username: author_username, profile_img
@@ -60,13 +63,21 @@ const BlogPage = () => {
     setBlog(blogStructure);
     setSimilarBlogs(null);
     setLoading(true);
+    setIsLikedByUser(false);
+    setCommentsWrapper(false);
+    setTotalParentCommentsLoaded(0);
   }
 
   return (
     <AnimationWrapper>
       {
         loading ? <Loader /> : 
-        <BlogContext.Provider value={{blog, setBlog, isLikedByUser, setIsLikedByUser}}>
+        <BlogContext.Provider value={{blog, setBlog, 
+        isLikedByUser, setIsLikedByUser, commentsWrapper, setCommentsWrapper,
+        totalParentCommentsLoaded, setTotalParentCommentsLoaded
+        }}>
+          <CommentsContainer />
+
           <div className="max-w-[900px] center py-10 max-lg:px-[5vw]">
             <img src={banner} alt={title} className="aspect-video" />
 
