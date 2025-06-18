@@ -6,7 +6,7 @@ import axios from 'axios';
 
 const CommentField = ({ action }) => {
   let { blog, setBlog, setTotalParentCommentsLoaded, blog: { _id, author: { _id: blog_author }, 
-  comments, activity, activity: { total_comments, total_parent_comments } }} = useContext(BlogContext);
+  comments, comments: { results: commentsArr }, activity, activity: { total_comments, total_parent_comments } }} = useContext(BlogContext);
   let { userAuth: { access_token, username, fullname, profile_img }} = useContext(UserContext);
   const [comment, setComment] = useState("");
 
@@ -34,7 +34,7 @@ const CommentField = ({ action }) => {
 
       data.childrenLevel = 0;
 
-      newCommentArr = [ data ]
+      newCommentArr = [ data, ...commentsArr ] 
 
       let parentCommentIncrementVal = 1;
 
