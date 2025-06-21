@@ -39,7 +39,7 @@ const CommentField = ({ action, index = undefined,
         data.childrenLevel = commentsArr[index].childrenLevel + 1;
         data.parentIndex = index;
 
-        commentsArr[index].isReplyLoaded = true;
+        commentsArr[index].isReplyLoaded = true; 
 
         commentsArr.splice(index + 1, 0, data);
 
