@@ -72,7 +72,7 @@ const BlogPage = () => {
     setIsLikedByUser(false);
     setCommentsWrapper(false);
     setTotalParentCommentsLoaded(0);
-  }
+  } 
 
   return (
     <AnimationWrapper>
