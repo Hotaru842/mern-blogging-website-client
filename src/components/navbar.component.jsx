@@ -30,7 +30,7 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="navbar">
+      <nav className="z-50 navbar">
       <Link to="/" className="flex-none w-10 h-10 cursor-pointer"> 
         <img src={logo} alt="logo" className="flex-none w-full" />
       </Link> 

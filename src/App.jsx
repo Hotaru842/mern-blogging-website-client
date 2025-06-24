@@ -30,7 +30,7 @@ function App() {
           <Route path="/editor" element={<Editor />} /> 
           <Route path="/editor/:blog_id" element={<Editor />} />
           <Route path="/" element={<Navbar />}>
-            <Route index element={<HomePage />} />
+            <Route index element={<HomePage />} /> 
             <Route path="settings" element={<SideNavbar />}>
               <Route path="edit-profile" element={<h1>Edit Profile Page</h1>} />
               <Route path="change-password" element={<h1>Change Password Page</h1>} />
