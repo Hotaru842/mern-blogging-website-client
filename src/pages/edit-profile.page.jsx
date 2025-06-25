@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import { UserContext } from '../App'
 import axios from 'axios';
 import { profileDataStructure } from './profile.page';
@@ -6,14 +6,17 @@ import { Toaster, toast } from "react-hot-toast";
 import AnimationWrapper from '../common/page-animation';
 import Loader from '../components/loader.component';
 import InputBox from '../components/input.component';
+import { uploadImage } from '../common/aws';
 
 const EditProfile = () => {
   let { userAuth, userAuth: { access_token }} = useContext(UserContext);
   let bioLimit = 150;
+  let profileImgRef = useRef();
 
   const [profile, setProfile] = useState(profileDataStructure);
   const [loading, setLoading] = useState(true);
   const [charactersLeft, setCharactersLeft] = useState(bioLimit);
+  const [updatedProfileImg, setUpdatedProfileImg] = useState(null);
 
   let { personal_info: { fullname, username: profile_username, 
   profile_img, email, bio }, social_links} = profile;
@@ -34,6 +37,30 @@ const EditProfile = () => {
 
   const handleCharacterChange = (e) => { 
     setCharactersLeft(bioLimit - e.target.value.length);
+  }
+
+  const handleImagePreview = (e) => {
+    let img = e.target.files[0];
+    
+    profileImgRef.current.src = URL.createObjectURL(img);
+    setUpdatedProfileImg(img);
+  }
+
+  const handleImageUpload = (e) => {
+    e.preventDefault();
+
+    if(updatedProfileImg) {
+      let loadingToast = toast.loading("Uploading image");
+      e.target.setAttribute("disabled", true);
+
+      uploadImage(updatedProfileImg)
+      .then(url => {
+        console.log(url);
+      })
+      .catch(err => {
+        console.log(err);
+      })
+    }
   }
 
   return (
@@ -57,10 +84,11 @@ const EditProfile = () => {
                   </div>
                   <img 
                     src={profile_img}
+                    ref={profileImgRef}
                   />
                 </label>
-                <input type="file" id="uploadImg" accept=".jpeg, .png, .jpg" hidden />
-                <button className="px-10 mt-5 btn-light max-lg:center lg:w-full">Save Profile Picture</button>
+                <input type="file" id="uploadImg" accept=".jpeg, .png, .jpg" hidden onChange={handleImagePreview} />
+                <button onClick={handleImageUpload} className="px-10 mt-5 btn-light max-lg:center lg:w-full">Save Profile Picture</button>
               </div>
 
               <div className="w-full">
