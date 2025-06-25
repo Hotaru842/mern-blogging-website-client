@@ -8,8 +8,9 @@ import Editor from "./pages/editor.page";
 import SearchPage from "./pages/search.page";
 import ProfilePage from "./pages/profile.page";
 import BlogPage from "./pages/blog.page";
-import PageNotFound from "./pages/404.page";
 import SideNavbar from "./components/sidenavbar.component";
+import ChangePassword from "./pages/change-password.page";
+import PageNotFound from "./pages/404.page";
 
 export const UserContext = createContext({});
 
@@ -33,7 +34,7 @@ function App() {
             <Route index element={<HomePage />} /> 
             <Route path="settings" element={<SideNavbar />}>
               <Route path="edit-profile" element={<h1>Edit Profile Page</h1>} />
-              <Route path="change-password" element={<h1>Change Password Page</h1>} />
+              <Route path="change-password" element={<ChangePassword />} />
             </Route>
             <Route path="sign-in" element={<UserAuthForm type="sign-in" />} />
             <Route path="sign-up" element={<UserAuthForm type="sign-up" />} />
