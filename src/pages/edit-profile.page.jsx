@@ -13,6 +13,7 @@ const EditProfile = () => {
   let { userAuth, userAuth: { access_token }, setUserAuth} = useContext(UserContext);
   let bioLimit = 150;
   let profileImgRef = useRef();
+  let editProfileForm = useRef();
 
   const [profile, setProfile] = useState(profileDataStructure);
   const [loading, setLoading] = useState(true);
@@ -87,13 +88,35 @@ const EditProfile = () => {
     }
   }
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    let form = new FormData(editProfileForm.current);
+    let formData = {};
+
+    for(let [key, value] of form.entries()) {
+      formData[key] = value;
+    }
+
+    console.log(formData);
+    let { username, bio, youtube, facebook, twitter, github, instagram, website } = formData;
+    
+    if(username.length < 3) {
+      return toast.error("Username should be at least 3 letters long");
+    }
+
+    if(bio.length > bioLimit) {
+      return toast.error(`Bio sholdn't be more than ${bioLimit} letters long`)
+    }
+  }
+
   return (
     <AnimationWrapper>
       {
         loading ? <Loader /> :
         <>
           <Toaster />
-          <form>
+          <form ref={editProfileForm}>
             <h1 className="max-md:hidden">Edit Profile</h1>
             <div className="flex flex-col items-start gap-8 py-10 lg:flex-row lg:gap-10">
               <div className="mb-5 max-lg:center">
@@ -147,7 +170,7 @@ const EditProfile = () => {
                     })
                   }
                 </div>
-                <button className="w-auto px-10 btn-dark" type="submit">
+                <button className="w-auto px-10 btn-dark" type="submit" onClick={handleSubmit}>
                   Update
                 </button>
               </div>
