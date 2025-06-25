@@ -108,6 +108,34 @@ const EditProfile = () => {
     if(bio.length > bioLimit) {
       return toast.error(`Bio sholdn't be more than ${bioLimit} letters long`)
     }
+
+    let loadingToast = toast.loading("Updating profile info");
+    e.target.setAttribute("disabled", true);
+
+    axios.post(import.meta.env.VITE_SERVER_DOMAIN + "/update-profile", {
+      username, bio,
+      social_links: { youtube, facebook, twitter, github, instagram, website }
+    }, {
+      headers: {
+        "Authorization": `Bearer ${access_token}`
+      }
+    })
+    .then(({ data }) => {
+      if(userAuth.username != data.username) {
+        let newUserAuth = { ...userAuth, username: data.username };
+        storeInSession("user", JSON.stringify(newUserAuth));
+        setUserAuth(newUserAuth);
+      }
+
+      toast.dismiss(loadingToast);
+      e.target.removeAttribute("disabled");
+      toast.success("Profile updated successfully!")
+    })
+    .catch(({ response }) => {
+      toast.dismiss(loadingToast);
+      e.target.removeAttribute("disabled");
+      toast.error(response.data.error);
+    })
   }
 
   return (
