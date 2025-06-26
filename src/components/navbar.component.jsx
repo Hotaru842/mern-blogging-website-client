@@ -1,14 +1,32 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../App";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import logo from "../imgs/logo.png"; 
 import UserNavigationPanel from "./user-navigation.component";
+import axios from "axios";
 
 const Navbar = () => {
   const [searchBoxVisibility, setSearchBoxVisibility] = useState(false);
-  const { userAuth, userAuth: { access_token, profile_img }} = useContext(UserContext);
+  const { userAuth, userAuth: { access_token, profile_img, new_notification_available },
+  setUserAuth} = useContext(UserContext);
   const [userNavPanel, setUserNavPanel] = useState(false);
   let navigate = useNavigate();
+
+  useEffect(() => {
+    if(access_token) {
+      axios.get(import.meta.env.VITE_SERVER_DOMAIN + "/new-notification", {
+        headers: {
+          "Authorization": `Bearer ${access_token}`
+        }
+      })
+      .then(({ data }) => {
+        setUserAuth({ ...userAuth, ...data});
+      })
+      .catch(err => {
+        console.log(err);
+      })
+    }
+  }, [access_token])
 
   const handleUserNavPanel = () => {
     setUserNavPanel(currentVal => !currentVal);
@@ -34,6 +52,7 @@ const Navbar = () => {
       <Link to="/" className="flex-none w-10 h-10 cursor-pointer"> 
         <img src={logo} alt="logo" className="flex-none w-full" />
       </Link> 
+
       <div className={"absolute left-0 w-full bg-white top-full mt-0.5 border-b border-grey py-4 px-[5vw] md:border-0 md:block md:relative md:inset-0 md:p-0 md:w-auto md:show " + (searchBoxVisibility ? "show" : "hide")}>
         <input 
           type="text"
@@ -59,7 +78,13 @@ const Navbar = () => {
           <>
             <Link to="/dashboard/notification">
               <button className="relative w-12 h-12 rounded-full bg-grey hover:bg-black/10">
-              <i className="block mt-1 text-xl fi fi-br-bell" /> 
+                <i className="block mt-1 text-xl fi fi-br-bell" /> 
+                {
+                  new_notification_available ?
+                  <span className="absolute z-10 w-3 h-3 rounded-full bg-red top-2 right-2" /> :
+                  null
+                }
+                
               </button>
             </Link>
             <div className="relative" onClick={handleUserNavPanel} onBlur={handleBlur}>
