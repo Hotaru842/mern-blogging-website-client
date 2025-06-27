@@ -3,7 +3,7 @@ import { UserContext } from "../App";
 import { Outlet, Navigate, NavLink } from "react-router-dom";
 
 const SideNavbar = () => {
-  let { userAuth: { access_token }} = useContext(UserContext);
+  let { userAuth: { access_token, new_notification_available }} = useContext(UserContext);
 
   let page = location.pathname.split("/")[2];
 
@@ -63,7 +63,13 @@ const SideNavbar = () => {
                 onClick={(e) => setPageState(e.target.innerText)}
                 className="sidebar-link"
               >
-                <i className="fi fi-br-bell" />
+                <div className="relative">
+                  { 
+                    new_notification_available ?
+                    <span className="absolute top-0 right-0 z-10 w-2 h-2 rounded-full bg-red" /> : null
+                  }
+                  <i className="fi fi-br-bell" />
+                </div>
                 Notification
               </NavLink>
 

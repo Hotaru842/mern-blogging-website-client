@@ -81,7 +81,7 @@ const Navbar = () => {
                 <i className="block mt-1 text-xl fi fi-br-bell" /> 
                 {
                   new_notification_available ?
-                  <span className="absolute z-10 w-3 h-3 rounded-full bg-red top-2 right-2" /> :
+                  <span className="absolute z-10 w-2 h-2 rounded-full bg-red top-[13px] right-[13px]" /> :
                   null
                 }
                 
