@@ -2,6 +2,11 @@ import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../App";
 import axios from "axios";
 import { filterPaginationData } from "../common/filter-pagination-data";
+import Loader from "../components/loader.component";
+import AnimationWrapper from "../common/page-animation";
+import NotificationCard from "../components/notification-card.component";
+import NoDataMessage from "../components/nodata.component";
+import LoadMoreDataButton from "../components/load-more.component";
 
 const Notifications = () => {
   let { userAuth: { access_token }} = useContext(UserContext);
@@ -30,7 +35,6 @@ const Notifications = () => {
       });
 
       setNotifications(formatedData);
-      console.log(formatedData);
     })
     .catch(err => {
       console.log(err);
@@ -60,6 +64,24 @@ const Notifications = () => {
           })
         }
       </div>
+      {
+        notifications == null ? <Loader /> :
+        <>
+          {
+            notifications.results.length > 0 ?
+            notifications.results.map((notification, i) => {
+              return <AnimationWrapper key={i} transition={{ delay: i * 0.08 }}>
+                <NotificationCard data={notification} index={i} notificationState={{ notifications, setNotifications }} />
+              </AnimationWrapper>
+            }) : <NoDataMessage message="Nothing available" />
+          }
+        </>
+      } 
+      <LoadMoreDataButton 
+        state={notifications} 
+        fetchDataFunc={fetchNotifications} 
+        aditionalParam={{ deletedDocCount: notifications?.deletedDocCount }}
+      />
     </div>
   )
 }
