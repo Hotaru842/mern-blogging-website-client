@@ -1,10 +1,18 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { getDay } from "../common/date";
+import NotificationCommentField from "./notification-comment-field.component";
 
 const NotificationCard = ({ data, index, notificationState }) => {
+  let [isReplying, setIsReplying] = useState(false);
+
   let { type, createdAt, comment, replied_on_comment, 
     user: { personal_info: { fullname, profile_img, username }},
   blog: { blog_id, title }} = data;
+
+  const handleReplyClick = () => {
+    setIsReplying(prevVal => !prevVal);
+  }
 
   return (
     <div className="p-6 border-b border-grey border-l-black">
@@ -45,11 +53,18 @@ const NotificationCard = ({ data, index, notificationState }) => {
         {
           type != "like" ? 
           <>
-            <button className="underline hover:text-black">Reply</button>
+            <button className="underline hover:text-black" onClick={handleReplyClick}>Reply</button>
             <button className="underline hover:text-black">Delete</button>
           </> : null
         }
       </div>
+
+      {
+        isReplying ? 
+        <div className="mt-8">
+          <NotificationCommentField />
+        </div> : null
+      }
     </div>
   )
 }
