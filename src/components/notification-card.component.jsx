@@ -8,7 +8,7 @@ import axios from "axios";
 const NotificationCard = ({ data, index, notificationState }) => {
   let [isReplying, setIsReplying] = useState(false);
 
-  let { type, reply, createdAt, comment, replied_on_comment, user,
+  let { seen, type, reply, createdAt, comment, replied_on_comment, user,
   user: { personal_info: { fullname, profile_img, username }},
   blog: { _id, blog_id, title }, _id: notification_id} = data;
   let { userAuth: { username: author_username, 
@@ -45,7 +45,7 @@ const NotificationCard = ({ data, index, notificationState }) => {
   }
 
   return (
-    <div className="p-6 border-b border-l-2 border-grey border-l-black">
+    <div className={"p-6 border-b border-grey border-l-black " + (!seen ? "border-l-2" : "") }>
       <div className="flex gap-5 mb-3">
         <img 
           src={profile_img} 
