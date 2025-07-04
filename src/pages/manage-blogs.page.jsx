@@ -3,6 +3,10 @@ import { UserContext } from "../App";
 import axios from "axios";
 import { filterPaginationData } from "../common/filter-pagination-data";
 import { Toaster } from "react-hot-toast";
+import InPageNavigation from "../components/inpage-navigation.component";
+import Loader from "../components/loader.component";
+import NoDataMessage from "../components/nodata.component";
+import AnimationWrapper from "../common/page-animation";
 
 const ManageBlogs = () => {
   const [blogs, setBlogs] = useState(null);
@@ -85,6 +89,24 @@ const ManageBlogs = () => {
         />
         <i className="fi fi-br-search absolute right-[10%] md:pointer-events-none md:left-5 top-1/2 -translate-y-1/2 !text-xl text-dark-grey"/>
       </div>
+      <InPageNavigation routes={["Published Blogs", "Drafts"]}>
+        {
+          blogs == null ? <Loader /> :
+          blogs.results.length > 0 ?
+          <>
+            {
+              blogs.results.map((blog, i) => {
+                return <AnimationWrapper key={i} transition={{ delay: i * 0.04 }}>
+                  <h1>Here goes the blog card</h1>
+                </AnimationWrapper>
+              })
+            }
+          </>
+          : <NoDataMessage message="No published blogs found" />
+        }
+        
+        <h1>This is drafts blogs</h1>
+      </InPageNavigation>
     </>
   )
 }
