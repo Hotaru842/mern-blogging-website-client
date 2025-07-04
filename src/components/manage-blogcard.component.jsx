@@ -15,7 +15,9 @@ const ManagePublishedBlogCard = ({ blog }) => {
             <p className="line-clamp-1">Published on {getDay(publishedAt)}</p>
           </div>
           <div className="flex gap-6 mt-3">
-            <Link>Edit</Link>
+            <Link to={`/editor/${blog_id}`} className="py-2 pr-4 underline">Edit</Link>
+            <button className="py-2 pr-4 underline lg:hidden">Stats</button>
+            <button className="py-2 pr-4 underline text-red">Delete</button>
           </div>
         </div>
       </div>
