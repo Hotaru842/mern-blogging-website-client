@@ -7,6 +7,7 @@ import InPageNavigation from "../components/inpage-navigation.component";
 import Loader from "../components/loader.component";
 import NoDataMessage from "../components/nodata.component";
 import AnimationWrapper from "../common/page-animation";
+import ManagePublishedBlogCard from "../components/manage-blogcard.component";
 
 const ManageBlogs = () => {
   const [blogs, setBlogs] = useState(null);
@@ -97,7 +98,7 @@ const ManageBlogs = () => {
             {
               blogs.results.map((blog, i) => {
                 return <AnimationWrapper key={i} transition={{ delay: i * 0.04 }}>
-                  <h1>Here goes the blog card</h1>
+                  <ManagePublishedBlogCard blog={blog} />
                 </AnimationWrapper>
               })
             }
