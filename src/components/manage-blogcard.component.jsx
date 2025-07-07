@@ -1,9 +1,14 @@
-import React from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { getDay } from "../common/date";
 
+const BlogStats = ({ stats }) => {
+  return <p>here goes the blog stats</p>
+}
+
 const ManagePublishedBlogCard = ({ blog }) => {
-  let { blog_id, title, banner, publishedAt } = blog;
+  let { blog_id, title, banner, publishedAt, activity } = blog; 
+  const [showStat, setShowStat] = useState(false);
 
   return (
     <>
@@ -16,11 +21,21 @@ const ManagePublishedBlogCard = ({ blog }) => {
           </div>
           <div className="flex gap-6 mt-3">
             <Link to={`/editor/${blog_id}`} className="py-2 pr-4 underline">Edit</Link>
-            <button className="py-2 pr-4 underline lg:hidden">Stats</button>
+            <button className="py-2 pr-4 underline lg:hidden" onClick={() => setShowStat(prevVal => !prevVal)}>Stats</button>
             <button className="py-2 pr-4 underline text-red">Delete</button>
           </div>
         </div>
+
+        <div className="max-lg:hidden">
+          <BlogStats stats={activity} />
+        </div>
       </div>
+      {
+        showStat ? 
+        <div className="lg:hidden">
+          <BlogStats stats={activity} />
+        </div> : null
+      }
     </>
   )
 }
