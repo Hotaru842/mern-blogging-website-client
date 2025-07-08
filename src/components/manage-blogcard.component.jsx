@@ -3,7 +3,17 @@ import { Link } from "react-router-dom";
 import { getDay } from "../common/date";
 
 const BlogStats = ({ stats }) => {
-  return <p>here goes the blog stats</p>
+  return <div className="flex gap-2 max-lg:pb-6 max-lg:mb-6 max-lg:border-b max-lg:border-grey">
+    {
+      Object.keys(stats).map((info, i) => {
+        return !info.includes("parent") ?
+        <div key={i} className={"flex flex-col items-center justify-center w-full h-full p-4 px-6 " + (i != 0 ? " border-grey border-l " : "")}>
+          <h1 className="!text-xl lg:!text-2xl mb-2">{stats[info].toLocaleString()}</h1>
+          <p className="capitalize max-lg:text-dark-grey">{info.split("_")[1]}</p>
+        </div> : null
+      })
+    }
+  </div>
 }
 
 const ManagePublishedBlogCard = ({ blog }) => {
